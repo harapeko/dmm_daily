@@ -3,6 +3,7 @@ var system = require('system');
 
 var DAILY_PACHINKO = 'http://www.dmm.com/netgame/pachinko/-/game/';
 var GAMES_TOP      = 'http://games.dmm.com/';
+var FREE_GET       = 'http://www.dmm.com/netgame/freeget/';
 var GAMES = [
   'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=777106/',
   'http://pc-play.games.dmm.com/play/strike',
@@ -35,6 +36,22 @@ casper.thenOpen(GAMES_TOP, function() {
 casper.each(GAMES, function(self, link) {
   self.thenOpen(link, function() {
       this.capture('capture/mission/' + this.getTitle() + '.png');
+  });
+});
+
+// ミッション受取
+casper.thenOpen(FREE_GET, function() {
+  this.waitForSelector(".bt-all", function success() {
+
+    this.capture('capture/mission/FREE_GET.png');
+    // click後 完了まで待つ
+    // TODO：waitForSelectorを使うように修正する
+    this.then(function() {
+      this.click('.bt-all');
+    }).wait(4000);
+
+    this.capture('capture/mission/FREE_GOT.png');
+    
   });
 });
 

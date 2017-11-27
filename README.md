@@ -14,4 +14,5 @@ https://yarnpkg.com/en/docs/install
 
 
 # USAGE
+- ミッション達成 `yarn run mission`
 - ポイント交換 `yarn run exchange`

@@ -1,9 +1,10 @@
 var casper = require('casper').create();
 var system = require('system');
 
-var URL = 'http://www.dmm.com/netgame/freeget/';
+var URL_FREEGET  = 'http://www.dmm.com/netgame/freeget/';
+var URL_EXCHANGE = 'http://www.dmm.com/netgame/freeget/-/exchange/';
 
-casper.start(URL, function() {
+casper.start(URL_FREEGET, function() {
   this.echo('start');
   this.fill('form.login', {
     'login_id': system.env.DMM_ID,
@@ -12,7 +13,7 @@ casper.start(URL, function() {
   this.capture('capture/exchange/start.png');
 });
 
-casper.waitForUrl('http://www.dmm.com/netgame/freeget/', function() {
+casper.waitForUrl(URL_FREEGET, function() {
   this.capture('capture/exchange/logined.png');
 });
 
@@ -24,7 +25,7 @@ casper.then(function() {
   this.capture('capture/exchange/bt-trade.png');
 });
 
-casper.waitForUrl('http://www.dmm.com/netgame/freeget/-/exchange/', function() {
+casper.waitForUrl(URL_EXCHANGE, function() {
   this.capture('capture/exchange/exchange.png');
 
   this.click('.exchange-once a');
@@ -35,7 +36,7 @@ casper.waitForUrl('http://www.dmm.com/netgame/freeget/-/exchange/', function() {
 
 // TODO：遷移を待つURLはこれじゃないかもしれないので、
 //       ポイントがたまったら手動で確認する
-casper.waitForUrl('http://www.dmm.com/netgame/freeget/', function() {
+casper.waitForUrl(URL_FREEGET, function() {
   this.capture('capture/exchange/fn-exchange.png');
 });
 

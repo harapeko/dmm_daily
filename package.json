@@ -8,6 +8,7 @@
     "phantomjs": "^2.1.7"
   },
   "scripts": {
-    "exchange": "casperjs exchange.js"
+    "exchange": "casperjs exchange.js",
+    "mission": "casperjs mission.js"
   }
 }

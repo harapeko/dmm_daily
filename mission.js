@@ -25,17 +25,20 @@ casper.start(DAILY_PACHINKO, function() {
 
 casper.waitForUrl(DAILY_PACHINKO, function() {
   this.capture('capture/mission/DAILY_PACHINKO.png');
+  this.echo('DAILY_PACHINKO done');
 });
 
 // DMMゲームトップ
 casper.thenOpen(GAMES_TOP, function() {
   this.capture('capture/mission/GAMES_TOP.png');
+  this.echo('GAMES_TOP done');
 });
 
 // 各ゲーム
 casper.each(GAMES, function(self, link) {
   self.thenOpen(link, function() {
       this.capture('capture/mission/' + this.getTitle() + '.png');
+      this.echo(this.getTitle() + ' done');
   });
 });
 
@@ -53,6 +56,7 @@ casper.thenOpen(FREE_GET, function() {
     this.capture('capture/mission/FREE_GOT.png');
     
   });
+  this.echo('FREE_GET done');
 });
 
 casper.run(function () {

@@ -3,6 +3,8 @@ var system = require('system');
 
 var DAILY_PACHINKO = 'http://www.dmm.com/netgame/pachinko/-/game/';
 var GAMES_TOP      = 'http://games.dmm.com/';
+var MY_GAME        = 'http://personal.games.dmm.com/my-games/';
+var GAME_LIST      = 'http://games.dmm.com/list/';
 var FREE_GET       = 'http://www.dmm.com/netgame/freeget/';
 var GAMES = [
   'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=777106/',
@@ -34,6 +36,18 @@ casper.thenOpen(GAMES_TOP, function() {
   this.echo('GAMES_TOP done');
 });
 
+// MY_GAME
+casper.thenOpen(MY_GAME, function() {
+  this.capture('capture/mission/MY_GAME.png');
+  this.echo('MY_GAME done');
+});
+
+// GAME_LIST
+casper.thenOpen(GAME_LIST, function() {
+  this.capture('capture/mission/GAME_LIST.png');
+  this.echo('GAME_LIST done');
+});
+
 // 各ゲーム
 casper.each(GAMES, function(self, link) {
   self.thenOpen(link, function() {
@@ -54,7 +68,7 @@ casper.thenOpen(FREE_GET, function() {
     }).wait(4000);
 
     this.capture('capture/mission/FREE_GOT.png');
-    
+
   });
   this.echo('FREE_GET done');
 });

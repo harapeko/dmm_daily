@@ -7,10 +7,10 @@ var MY_GAME        = 'http://personal.games.dmm.com/my-games/';
 var GAME_LIST      = 'http://games.dmm.com/list/';
 var FREE_GET       = 'http://www.dmm.com/netgame/freeget/';
 var GAMES = [
-  'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=777106/',
+  'http://pc-play.games.dmm.com/play/oshirore/',
   'http://pc-play.games.dmm.com/play/strike',
   'http://pc-play.games.dmm.com/play/seiken',
-  'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/',
+  'http://pc-play.games.dmm.com/play/aigisc',
   'http://pc-play.games.dmm.com/play/kanpani',
 ]
 

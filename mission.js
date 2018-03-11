@@ -7,7 +7,6 @@ var MY_GAME        = 'http://personal.games.dmm.com/my-games/';
 var GAME_LIST      = 'http://games.dmm.com/list/';
 var FREE_GET       = 'http://www.dmm.com/netgame/freeget/';
 var GAMES = [
-  'http://pc-play.games.dmm.com/play/oshirore/',
   'http://pc-play.games.dmm.com/play/tohken',
   'http://pc-play.games.dmm.com/play/seiken',
   'http://pc-play.games.dmm.com/play/aigisc',

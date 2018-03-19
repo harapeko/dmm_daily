@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "casperjs": "^1.1.4",
-    "phantomjs": "^2.1.7"
+    "casperjs": "1.1.4",
+    "phantomjs": "2.1.7"
   },
   "scripts": {
     "exchange": "casperjs exchange.js",

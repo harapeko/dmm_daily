@@ -24,7 +24,7 @@ void(async () => {
   await page.goto(LOGIN_PAGE, {waitUntil: 'domcontentloaded'})
   await page.type('#login_id', process.env.DMM_ID)
   await page.type('#password', process.env.DMM_PASS)
-  await page.click('input[type=submit')
+  await page.click('input[type=submit]')
 
   await console.log('login...')
   await page.screenshot({path: `capture/mission/0_login.png`})

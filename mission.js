@@ -43,7 +43,7 @@ void(async () => {
   await Promise.all(missions.map(
     async (url, index) => {
       let page_name = url.match(/(\w+)\/$/)[1]
-      await page.goto(url, { waitUntil: 'domcontentloaded' })
+      await page.goto(url, {waitUntil: 'domcontentloaded'})
       await page.screenshot({path: `capture/mission/${index + 1}_${page_name}.png`})
       await console.log(`loaded! ${page_name}`)
     }

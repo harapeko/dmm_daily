@@ -1,14 +1,13 @@
 {
   "name": "dmm_daily",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "2.0.0",
+  "main": "mission.js",
   "license": "MIT",
-  "devDependencies": {
-    "casperjs": "^1.1.4",
-    "phantomjs": "^2.1.7"
-  },
   "scripts": {
-    "exchange": "casperjs exchange.js",
-    "mission": "casperjs mission.js"
+    "exchange": "echo TODO: 交換タスク",
+    "mission": "node mission.js"
+  },
+  "dependencies": {
+    "puppeteer": "^1.13.0"
   }
 }

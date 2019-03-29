@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const puppeteer = require('puppeteer')
 
@@ -8,14 +8,13 @@ const LOGIN_PAGE = 'https://accounts.dmm.com/service/login/password'
 module.exports = async () => {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
-  // TODO：一旦画像ありき状態で確認したいのでコメントアウトしておく
-  // await page.setRequestInterception(true)
-  // page.on('request', interceptedRequest => {
-  //   if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-  //     interceptedRequest.abort()
-  //   else
-  //     interceptedRequest.continue()
-  // });
+  await page.setRequestInterception(true)
+  await page.on('request', interceptedRequest => {
+    if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+      interceptedRequest.abort()
+    else
+      interceptedRequest.continue()
+  })
 
   // ログイン
   await page.goto(LOGIN_PAGE, {waitUntil: 'domcontentloaded'})

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const login = require('./login')
 
@@ -9,11 +9,18 @@ const MISSIONS_DEFAULT = [
   'http://www.dmm.com/netgame/pachinko/-/game/', // デイリーパチンコ
   'http://personal.games.dmm.com/my-games/',
   'https://games.dmm.com/detail/oshirore/',
-  'https://games.dmm.com/detail/tohken/',
-  'https://games.dmm.com/detail/seiken/',
+  'https://games.dmm.com/detail/asterism/',
   'https://games.dmm.com/detail/aigisc/',
-  'https://games.dmm.com/detail/kanpani/',
+  'https://games.dmm.com/detail/kabaneri/',
+  'https://games.dmm.com/detail/angellock/',
+  'https://games.dmm.com/detail/kancolle/',
 ]
+
+function hoge(page, url, index) {
+  let page_name = url.match(/(\w+)\/$/)[1]
+  page.goto(url, {waitUntil: 'domcontentloaded'})
+  console.log(`loaded! ${page_name}`)
+}
 
 void(async () => {
   const [browser, page] = await login()
@@ -26,18 +33,60 @@ void(async () => {
   const missions = [...new Set([...MISSIONS_DEFAULT, ...lotteries])]
 
   // ミッション実行
-  await Promise.all(missions.map(
-    async (url, index) => {
-      let page_name = url.match(/(\w+)\/$/)[1]
-      await page.goto(url, {waitUntil: 'domcontentloaded'})
-      // await page.waitFor(30000)
-      await page.screenshot({
-        path: `capture/mission/${index + 1}_${page_name}.png`,
-        fullPage: true
-      })
-      await console.log(`loaded! ${page_name}`)
-    }
-  ))
+  // 画像はじいたらこっちのほうが遅くなった 50-60s
+  // await Promise.all(missions.map((url, index) => {
+  //   return new Promise(async (resolve, reject) => {
+  //     const page_name = await url.match(/(\w+)\/$/)[1]
+  //     console.time(`loaded! ${index + 1}_${page_name}`)
+
+  //     const page = await browser.newPage()
+  //     await page.setDefaultNavigationTimeout(60000)
+  //     await page.setRequestInterception(true)
+  //     await page.on('request', interceptedRequest => {
+  //       if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+  //         interceptedRequest.abort()
+  //       else
+  //         interceptedRequest.continue()
+  //     })
+
+  //     await page.goto(url, {waitUntil: 'domcontentloaded'})
+
+  //     await page.screenshot({
+  //       path: `capture/mission/${index + 1}_${page_name}.png`,
+  //       fullPage: true
+  //     })
+
+  //     page.close()
+  //     console.timeEnd(`loaded! ${index + 1}_${page_name}`)
+  //     resolve()
+  //   })
+  // }))
+
+  // ミッション実行
+  // 画像はじいたらこっちのほうが早くなった 40-45s
+  await Promise.all(missions.map(async (url, index) => {
+    const page_name = await url.match(/(\w+)\/$/)[1]
+    console.time(`loaded! ${index + 1}_${page_name}`)
+
+    const page = await browser.newPage()
+    await page.setDefaultNavigationTimeout(60000)
+    await page.setRequestInterception(true)
+    await page.on('request', interceptedRequest => {
+      if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+        interceptedRequest.abort()
+      else
+        interceptedRequest.continue()
+    })
+    await page.goto(url, {waitUntil: 'domcontentloaded'})
+    // await page.waitFor(30000)
+    // await page.screenshot({
+    //   path: `capture/mission/${index + 1}_${page_name}.png`,
+    //   fullPage: true
+    // })
+
+    page.close()
+    console.timeEnd(`loaded! ${index + 1}_${page_name}`)
+  }))
 
   // ミッション報酬受け取り
   await page.goto(MISSION_TOP)

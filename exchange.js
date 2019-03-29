@@ -1,34 +1,14 @@
-const puppeteer = require('puppeteer')
+'use strict';
 
-const LOGIN_PAGE = 'https://accounts.dmm.com/service/login/password'
+const login = require('./login')
+
 const EXCHANGES = [
   'https://mission.games.dmm.com/exchange/',
   'https://mission.games.dmm.com/pachinko-exchange/',
 ]
 
-
 void(async () => {
-  const browser = await puppeteer.launch()
-  const page = await browser.newPage()
-  await page.setRequestInterception(true)
-  page.on('request', interceptedRequest => {
-    if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-      interceptedRequest.abort()
-    else
-      interceptedRequest.continue()
-  });
-
-  // ログイン
-  await page.goto(LOGIN_PAGE, {waitUntil: 'domcontentloaded'})
-  await page.type('#login_id', process.env.DMM_ID)
-  await page.type('#password', process.env.DMM_PASS)
-  await page.click('input[type=submit]')
-
-  await console.log('login...')
-  await page.screenshot({path: `capture/exchange/0_login.png`})
-  await page.waitForNavigation({waitUntil: 'domcontentloaded'})
-  await page.screenshot({path: `capture/exchange/0_logined.png`})
-  await console.log('logined!')
+  const [browser, page] = await login()
 
   // 交換実行
   await Promise.all(EXCHANGES.map(

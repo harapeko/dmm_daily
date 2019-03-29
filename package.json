@@ -4,7 +4,7 @@
   "main": "mission.js",
   "license": "MIT",
   "scripts": {
-    "exchange": "echo TODO: 交換タスク",
+    "exchange": "node exchange.js",
     "mission": "node mission.js"
   },
   "dependencies": {

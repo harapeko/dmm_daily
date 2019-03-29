@@ -1,34 +1,52 @@
-var casper = require('casper').create();
-var system = require('system');
+const puppeteer = require('puppeteer')
 
-var URL_FREEGET  = 'http://www.dmm.com/netgame/freeget/';
-var URL_EXCHANGE = 'http://www.dmm.com/netgame/freeget/-/exchange/';
+const LOGIN_PAGE = 'https://accounts.dmm.com/service/login/password'
+const EXCHANGES = [
+  'https://mission.games.dmm.com/exchange/',
+  'https://mission.games.dmm.com/pachinko-exchange/',
+]
 
-casper.start(URL_EXCHANGE, function() {
-  this.echo('start');
-  this.fill('form.login', {
-    'login_id': system.env.DMM_ID,
-    'password': system.env.DMM_PASS
-}, true);
-  this.capture('capture/exchange/start.png');
-});
 
-casper.waitForUrl(URL_EXCHANGE, function() {
-  this.capture('capture/exchange/exchange.png');
+void(async () => {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.setRequestInterception(true)
+  page.on('request', interceptedRequest => {
+    if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+      interceptedRequest.abort()
+    else
+      interceptedRequest.continue()
+  });
 
-  // TODO：ボタンが非活性のときは終了する
-  this.click('.exchange-once a');
-  this.capture('capture/exchange/exchange-once.png');
+  // ログイン
+  await page.goto(LOGIN_PAGE, {waitUntil: 'domcontentloaded'})
+  await page.type('#login_id', process.env.DMM_ID)
+  await page.type('#password', process.env.DMM_PASS)
+  await page.click('input[type=submit]')
 
-  this.click('.fn-exchange');
-});
+  await console.log('login...')
+  await page.screenshot({path: `capture/exchange/0_login.png`})
+  await page.waitForNavigation({waitUntil: 'domcontentloaded'})
+  await page.screenshot({path: `capture/exchange/0_logined.png`})
+  await console.log('logined!')
 
-// TODO：遷移を待つURLはこれじゃないかもしれないので、
-//       ポイントがたまったら手動で確認する
-casper.waitForUrl(URL_FREEGET, function() {
-  this.capture('capture/exchange/fn-exchange.png');
-});
+  // 交換実行
+  await Promise.all(EXCHANGES.map(
+    async (url, index) => {
+      let page_name = url.match(/(\w*-?\w+)\/$/)[1]
+      await page.goto(url, {waitUntil: 'domcontentloaded'})
+      await page.waitFor('.c-pageTitle')
 
-casper.run(function () {
-  this.echo('end').exit();
-});
+      if ( await page.$('.c-btnPrimary.fn-modalOpen').then(el => !!el) ) {
+        await page.click('.c-btnPrimary.fn-modalOpen')
+        await page.waitFor('.c-btnPrimary.fn-exchange')
+        await page.click('.c-btnPrimary.fn-exchange')
+        await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
+      }
+
+      await console.log(`done! ${page_name}`)
+    }
+  ))
+
+  await browser.close()
+})()

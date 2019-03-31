@@ -15,7 +15,7 @@ void(async () => {
   await Promise.all(EXCHANGES.map(async (url, index) => {
     const page_name = await url.match(/(\w+)\/$/)[1]
 
-    const [browser, page] = await launch()
+    const page = await browser.newPage()
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     await page.waitFor('.c-pageTitle')

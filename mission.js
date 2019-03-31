@@ -13,7 +13,6 @@ const MISSIONS_DEFAULT = [
   'https://games.dmm.com/detail/asterism/',
   'https://games.dmm.com/detail/aigisc/',
   'https://games.dmm.com/detail/kabaneri/',
-  'https://games.dmm.com/detail/angellock/',
   'https://games.dmm.com/detail/kancolle/',
 ]
 
@@ -28,42 +27,12 @@ void(async () => {
   const missions = [...new Set([...MISSIONS_DEFAULT, ...lotteries])]
 
   // ミッション実行
-  // 画像はじいたらこっちのほうが遅くなった 50-60s
-  // await Promise.all(missions.map((url, index) => {
-  //   return new Promise(async (resolve, reject) => {
-  //     const page_name = await url.match(/(\w+)\/$/)[1]
-  //     console.time(`loaded! ${index + 1}_${page_name}`)
-
-  //     const page = await browser.newPage()
-  //     await page.setDefaultNavigationTimeout(60000)
-  //     await page.setRequestInterception(true)
-  //     await page.on('request', interceptedRequest => {
-  //       if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-  //         interceptedRequest.abort()
-  //       else
-  //         interceptedRequest.continue()
-  //     })
-
-  //     await page.goto(url, {waitUntil: 'domcontentloaded'})
-
-  //     await page.screenshot({
-  //       path: `capture/mission/${index + 1}_${page_name}.png`,
-  //       fullPage: true
-  //     })
-
-  //     page.close()
-  //     console.timeEnd(`loaded! ${index + 1}_${page_name}`)
-  //     resolve()
-  //   })
-  // }))
-
-  // ミッション実行
   // 画像はじいたらこっちのほうが早くなった 40-45s
   await Promise.all(missions.map(async (url, index) => {
     const page_name = await url.match(/(\w+)\/$/)[1]
     console.time(`loaded! ${index + 1}_${page_name}`)
 
-    const [browser, page] = await launch()
+    const page = await browser.newPage()
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     // await page.waitFor(30000)
@@ -72,7 +41,7 @@ void(async () => {
     //   fullPage: true
     // })
 
-    await browser.close()
+    await page.close()
     console.timeEnd(`loaded! ${index + 1}_${page_name}`)
   }))
 

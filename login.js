@@ -15,9 +15,9 @@ module.exports = async () => {
   await page.click('input[type=submit]')
 
   await console.log('login...')
-  // await page.screenshot({path: `capture/mission/0_login.png`})
+  await page.screenshot({path: `capture/mission/0_login.png`})
   await page.waitForNavigation({waitUntil: 'domcontentloaded'})
-  // await page.screenshot({path: `capture/mission/0_logined.png`})
+  await page.screenshot({path: `capture/mission/0_logined.png`})
   await console.log('logined!')
 
   return [browser, page]

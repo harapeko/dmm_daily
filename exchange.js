@@ -5,7 +5,7 @@ const launch = require('./launch')
 
 const EXCHANGES = [
   'https://mission.games.dmm.com/exchange/',
-  // 'https://mission.games.dmm.com/pachinko-exchange/',
+  'https://mission.games.dmm.com/pachinko-exchange/',
 ]
 
 void(async () => {
@@ -26,11 +26,9 @@ void(async () => {
     const isExchange = await page.$('.c-btnPrimary.fn-modalOpen').then(el => !!el)
 
     if ( isExchange ) {
-      console.log('aru')
       await page.click('.c-btnPrimary.fn-modalOpen')
       await page.waitFor('.c-btnPrimary.fn-exchange')
       await page.click('.c-btnPrimary.fn-exchange')
-      await page.waitFor(1000)
       await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
     }
 

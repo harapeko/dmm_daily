@@ -16,12 +16,6 @@ const MISSIONS_DEFAULT = [
   'https://games.dmm.com/detail/kancolle/',
 ]
 
-function hoge(page, url, index) {
-  let page_name = url.match(/(\w+)\/$/)[1]
-  page.goto(url, {waitUntil: 'domcontentloaded'})
-  console.log(`loaded! ${page_name}`)
-}
-
 void(async () => {
   const [browser, page] = await login()
 

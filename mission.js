@@ -1,6 +1,7 @@
 'use strict'
 
 const login = require('./login')
+const launch = require('./launch')
 
 // ミッションTOP。抽選URL取得、ミッション報酬受取で使用する
 const MISSION_TOP = 'https://mission.games.dmm.com/'
@@ -62,15 +63,8 @@ void(async () => {
     const page_name = await url.match(/(\w+)\/$/)[1]
     console.time(`loaded! ${index + 1}_${page_name}`)
 
-    const page = await browser.newPage()
-    await page.setDefaultNavigationTimeout(60000)
-    await page.setRequestInterception(true)
-    await page.on('request', interceptedRequest => {
-      if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-        interceptedRequest.abort()
-      else
-        interceptedRequest.continue()
-    })
+    const [browser, page] = await launch()
+
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     // await page.waitFor(30000)
     // await page.screenshot({
@@ -78,7 +72,7 @@ void(async () => {
     //   fullPage: true
     // })
 
-    page.close()
+    await browser.close()
     console.timeEnd(`loaded! ${index + 1}_${page_name}`)
   }))
 

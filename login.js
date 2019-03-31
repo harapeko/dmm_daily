@@ -1,20 +1,12 @@
 'use strict'
 
-const puppeteer = require('puppeteer')
+const launch = require('./launch')
 
 // ログインページ
 const LOGIN_PAGE = 'https://accounts.dmm.com/service/login/password'
 
 module.exports = async () => {
-  const browser = await puppeteer.launch()
-  const page = await browser.newPage()
-  await page.setRequestInterception(true)
-  await page.on('request', interceptedRequest => {
-    if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-      interceptedRequest.abort()
-    else
-      interceptedRequest.continue()
-  })
+  const [browser, page] = await launch()
 
   // ログイン
   await page.goto(LOGIN_PAGE, {waitUntil: 'domcontentloaded'})

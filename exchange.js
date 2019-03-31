@@ -1,6 +1,7 @@
 'use strict'
 
 const login = require('./login')
+const launch = require('./launch')
 
 const EXCHANGES = [
   'https://mission.games.dmm.com/exchange/',
@@ -14,20 +15,12 @@ void(async () => {
   await Promise.all(EXCHANGES.map(async (url, index) => {
     const page_name = await url.match(/(\w+)\/$/)[1]
 
-    const page = await browser.newPage()
-    await page.setDefaultNavigationTimeout(60000)
-    await page.setRequestInterception(true)
-    await page.on('request', interceptedRequest => {
-      if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-        interceptedRequest.abort()
-      else
-        interceptedRequest.continue()
-    })
+    const [browser, page] = await launch()
+
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     await page.waitFor('.c-pageTitle')
     await page.waitFor('.c-capt01')
 
-    await page.waitFor(10000)
     await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
 
     const isExchange = await page.$('.c-btnPrimary.fn-modalOpen').then(el => !!el)
@@ -42,6 +35,7 @@ void(async () => {
     }
 
     await console.log(`done! ${page_name}`)
+    await browser.close()
   }))
 
   await browser.close()

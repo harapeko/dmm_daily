@@ -35,7 +35,7 @@ void(async () => {
     const page = await browser.newPage()
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
-    // await page.waitFor(30000)
+    await page.waitFor(20000)
     // await page.screenshot({
     //   path: `capture/mission/${index + 1}_${page_name}.png`,
     //   fullPage: true
@@ -50,6 +50,7 @@ void(async () => {
   await page.waitFor('.fn-tabReceive')
   await page.click('.receiveAll_btn')
   await page.waitFor('.fn-getMedalSingle')
+  await page.waitFor(5000)
   // await page.screenshot({path: 'capture/mission/99_freeget.png'})
   await console.log('freeget!')
 

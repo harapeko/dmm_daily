@@ -13,7 +13,7 @@ void(async () => {
 
   // 交換実行
   await Promise.all(EXCHANGES.map(async (url, index) => {
-    const page_name = await url.match(/(\w+)\/$/)[1]
+    const page_name = await url.match(/(\w*-?\w+)\/$/)[1]
 
     const page = await browser.newPage()
 
@@ -23,17 +23,19 @@ void(async () => {
 
     await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
 
-    const isExchange = await page.$('.c-btnPrimary.fn-modalOpen').then(el => !!el)
+    // const isExchange = await page.$('.c-btnPrimary.fn-modalOpen').then(el => !!el)
+    const isExchange = await page.$x("//h2[text()='一括交換する']").then(el => !!el.length)
 
     if ( isExchange ) {
       await page.click('.c-btnPrimary.fn-modalOpen')
       await page.waitFor('.c-btnPrimary.fn-exchange')
       await page.click('.c-btnPrimary.fn-exchange')
-      await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
+      await page.waitFor('p-modal.fn-modal.fn-modalClose.is-active.is-commit')
+      // await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
     }
 
     await console.log(`done! ${page_name}`)
-    await browser.close()
+    // await page.close()
   }))
 
   await browser.close()

@@ -11,10 +11,13 @@ const MISSIONS = [
   'http://personal.games.dmm.com/my-games/',
 ]
 // ミッションゲームURLs あとで抽選URLとマージするときに使用する
+// NOTE:
+// URLが"http://pc-play.games.dmm.com/play/"じゃないのは、
+// 抽選ミッションのURLとの重複からはじくためだけど、末尾だけ取得すればリダイレクトが減ってよいのでは
 const MISSIONS_GAME = [
   'https://games.dmm.com/detail/oshirore/',
   'https://games.dmm.com/detail/aigisc/',
-  'https://games.dmm.com/detail/kabaneri/',
+  'https://games.dmm.com/detail/baldr/',
   'https://games.dmm.com/detail/kancolle/',
 ]
 
@@ -29,7 +32,7 @@ void(async () => {
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
 
-    await page.close()
+    // await page.close()
     console.timeEnd(`loaded! ${page_name}`)
   }))
 
@@ -47,9 +50,11 @@ void(async () => {
     console.time(`loaded! ${index + 1}_${page_name}`)
 
     const page = await browser.newPage()
+    await page.setDefaultTimeout(100000)
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     await page.waitFor('#foot')
+    // await page.waitFor(1000)
     // await page.screenshot({
     //   path: `capture/mission/${index + 1}_${page_name}.png`,
     //   fullPage: true
@@ -64,7 +69,7 @@ void(async () => {
   await page.waitFor('.fn-tabReceive')
   await page.click('.receiveAll_btn')
   await page.waitFor('.fn-getMedalSingle')
-  await page.waitFor(5000)
+  // await page.waitFor(5000)
   // await page.screenshot({path: 'capture/mission/99_freeget.png'})
   await console.log('freeget!')
 

@@ -16,26 +16,22 @@ void(async () => {
     const page_name = await url.match(/(\w*-?\w+)\/$/)[1]
 
     const page = await browser.newPage()
+    await page.setDefaultTimeout(100000)
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     await page.waitFor('.c-pageTitle')
     await page.waitFor('.c-capt01')
 
-    await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
-
-    // const isExchange = await page.$('.c-btnPrimary.fn-modalOpen').then(el => !!el)
     const isExchange = await page.$x("//h2[text()='一括交換する']").then(el => !!el.length)
 
     if ( isExchange ) {
       await page.click('.c-btnPrimary.fn-modalOpen')
       await page.waitFor('.c-btnPrimary.fn-exchange')
       await page.click('.c-btnPrimary.fn-exchange')
-      await page.waitFor('p-modal.fn-modal.fn-modalClose.is-active.is-commit')
+      await page.waitFor('.p-modal.fn-modal.fn-modalClose.is-active.is-commit')
       // await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
+      await console.log(`done! ${page_name}`)
     }
-
-    await console.log(`done! ${page_name}`)
-    // await page.close()
   }))
 
   await browser.close()

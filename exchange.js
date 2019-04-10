@@ -16,7 +16,7 @@ void(async () => {
     const page_name = await url.match(/(\w*-?\w+)\/$/)[1]
 
     const page = await browser.newPage()
-    await page.setDefaultTimeout(100000)
+    // await page.setDefaultTimeout(100000)
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     await page.waitFor('.c-pageTitle')
@@ -28,7 +28,8 @@ void(async () => {
       await page.click('.c-btnPrimary.fn-modalOpen')
       await page.waitFor('.c-btnPrimary.fn-exchange')
       await page.click('.c-btnPrimary.fn-exchange')
-      await page.waitFor('.p-modal.fn-modal.fn-modalClose.is-active.is-commit')
+
+      await page.waitFor('.p-modal.fn-modal.fn-modalClose.is-commit.is-active')
       // await page.screenshot({path: `capture/exchange/${index + 1}_${page_name}.png`})
       await console.log(`done! ${page_name}`)
     }

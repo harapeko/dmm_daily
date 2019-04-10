@@ -54,15 +54,18 @@ void(async () => {
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
     await page.waitFor('#foot')
-    // await page.waitFor(1000)
     // await page.screenshot({
     //   path: `capture/mission/${index + 1}_${page_name}.png`,
     //   fullPage: true
     // })
 
-    await page.close()
+    // await page.close()
     console.timeEnd(`loaded! ${index + 1}_${page_name}`)
   }))
+
+  // FIXME: これを使わないようにしたい
+  await page.waitFor(10000)
+  await page.waitFor(10000)
 
   // ミッション報酬受け取り
   await page.goto(MISSION_TOP)

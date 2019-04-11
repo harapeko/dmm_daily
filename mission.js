@@ -29,6 +29,13 @@ void(async () => {
     console.time(`loaded! ${page_name}`)
 
     const page = await browser.newPage()
+    await page.setRequestInterception(true)
+    await page.on('request', interceptedRequest => {
+      if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+        interceptedRequest.abort()
+      else
+        interceptedRequest.continue()
+    })
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
 
@@ -38,6 +45,7 @@ void(async () => {
 
   // 抽選URLとミッションURLをマージして一意な配列にする
   await page.goto(MISSION_TOP)
+  await page.bringToFront()
   await page.waitFor('.fn-tabLottery')
   await page.click('.fn-tabLottery')
   const lotteries = await page.$$eval('.listMission_targetLink', els => els.map(n => n.href))
@@ -51,9 +59,16 @@ void(async () => {
 
     const page = await browser.newPage()
     await page.setDefaultTimeout(100000)
+    await page.setRequestInterception(true)
+    await page.on('request', interceptedRequest => {
+      if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+        interceptedRequest.abort()
+      else
+        interceptedRequest.continue()
+    })
 
-    await page.goto(url, {waitUntil: 'domcontentloaded'})
-    await page.waitFor('#foot')
+    await page.goto(url, {waitUntil: 'load'})
+    // await page.waitFor('#foot')
     // await page.screenshot({
     //   path: `capture/mission/${index + 1}_${page_name}.png`,
     //   fullPage: true
@@ -62,10 +77,6 @@ void(async () => {
     // await page.close()
     console.timeEnd(`loaded! ${index + 1}_${page_name}`)
   }))
-
-  // FIXME: これを使わないようにしたい
-  await page.waitFor(10000)
-  await page.waitFor(10000)
 
   // ミッション報酬受け取り
   await page.goto(MISSION_TOP)

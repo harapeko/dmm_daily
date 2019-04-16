@@ -53,39 +53,57 @@ void(async () => {
 
   // ミッション実行
   // 画像はじいたらこっちのほうが早くなった 40-45s
-  await Promise.all(missions.map(async (url, index) => {
-    const page_name = await url.match(/(\w+)\/$/)[1]
-    console.time(`loaded! ${index + 1}_${page_name}`)
+  // await Promise.all(missions.map(async (url, index) => {
+  //   const page_name = await url.match(/(\w+)\/$/)[1]
+  //   console.time(`loaded! ${index + 1}_${page_name}`)
 
-    const page = await browser.newPage()
-    await page.setDefaultTimeout(100000)
-    await page.setRequestInterception(true)
-    await page.on('request', interceptedRequest => {
-      if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-        interceptedRequest.abort()
-      else
-        interceptedRequest.continue()
-    })
+  //   const page = await browser.newPage()
+  //   await page.setDefaultTimeout(100000)
+  //   // await page.setRequestInterception(true)
+  //   // await page.on('request', interceptedRequest => {
+  //   //   if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+  //   //     interceptedRequest.abort()
+  //   //   else
+  //   //     interceptedRequest.continue()
+  //   // })
 
-    await page.goto(url, {waitUntil: 'load'})
-    // await page.waitFor('#foot')
-    // await page.screenshot({
-    //   path: `capture/mission/${index + 1}_${page_name}.png`,
-    //   fullPage: true
-    // })
+  //   await page.goto(url, {waitUntil: 'load'})
+  //   // await page.waitFor('#foot')
+  //   // await page.screenshot({
+  //   //   path: `capture/mission/${index + 1}_${page_name}.png`,
+  //   //   fullPage: true
+  //   // })
 
-    // await page.close()
-    console.timeEnd(`loaded! ${index + 1}_${page_name}`)
-  }))
+  //   // await page.close()
+  //   console.timeEnd(`loaded! ${index + 1}_${page_name}`)
+  // }))
+  // .then(
+  //   await page.waitFor(20000)
+  // )
+
+  // await Promise.all(missions.map(async (url, index) => {
+  //   return new Promise((resolve, reject) => {
+  //     await page.goto(url, {waitUntil: 'load'})
+  //   })
+  // }))
+
+  // ミッション実行
+  for (let i = 0; i < missions.length; i ++) {
+    const page_name = await missions[i].match(/(\w+)\/$/)[1]
+    console.time(`loaded! ${i + 1}_${page_name}`)
+    await page.goto(missions[i], {waitUntil: 'load'})
+    console.timeEnd(`loaded! ${i + 1}_${page_name}`)
+  }
 
   // ミッション報酬受け取り
   await page.goto(MISSION_TOP)
+  await page.bringToFront()
   await page.waitFor('.fn-tabReceive')
   await page.click('.receiveAll_btn')
   await page.waitFor('.fn-getMedalSingle')
-  // await page.waitFor(5000)
+  // await page.waitFor(1000)
   // await page.screenshot({path: 'capture/mission/99_freeget.png'})
   await console.log('freeget!')
 
-  await browser.close()
+  // await browser.close()
 })()

@@ -39,7 +39,6 @@ void(async () => {
 
     await page.goto(url, {waitUntil: 'domcontentloaded'})
 
-    // await page.close()
     console.timeEnd(`loaded! ${page_name}`)
   }))
 
@@ -50,42 +49,6 @@ void(async () => {
   await page.click('.fn-tabLottery')
   const lotteries = await page.$$eval('.listMission_targetLink', els => els.map(n => n.href))
   const missions = [...new Set([...MISSIONS_GAME, ...lotteries])]
-
-  // ミッション実行
-  // 画像はじいたらこっちのほうが早くなった 40-45s
-  // await Promise.all(missions.map(async (url, index) => {
-  //   const page_name = await url.match(/(\w+)\/$/)[1]
-  //   console.time(`loaded! ${index + 1}_${page_name}`)
-
-  //   const page = await browser.newPage()
-  //   await page.setDefaultTimeout(100000)
-  //   // await page.setRequestInterception(true)
-  //   // await page.on('request', interceptedRequest => {
-  //   //   if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
-  //   //     interceptedRequest.abort()
-  //   //   else
-  //   //     interceptedRequest.continue()
-  //   // })
-
-  //   await page.goto(url, {waitUntil: 'load'})
-  //   // await page.waitFor('#foot')
-  //   // await page.screenshot({
-  //   //   path: `capture/mission/${index + 1}_${page_name}.png`,
-  //   //   fullPage: true
-  //   // })
-
-  //   // await page.close()
-  //   console.timeEnd(`loaded! ${index + 1}_${page_name}`)
-  // }))
-  // .then(
-  //   await page.waitFor(20000)
-  // )
-
-  // await Promise.all(missions.map(async (url, index) => {
-  //   return new Promise((resolve, reject) => {
-  //     await page.goto(url, {waitUntil: 'load'})
-  //   })
-  // }))
 
   // ミッション実行
   for (let i = 0; i < missions.length; i ++) {
@@ -105,5 +68,5 @@ void(async () => {
   // await page.screenshot({path: 'capture/mission/99_freeget.png'})
   await console.log('freeget!')
 
-  // await browser.close()
+  await browser.close()
 })()

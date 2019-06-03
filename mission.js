@@ -17,7 +17,7 @@ const MISSIONS = [
 const MISSIONS_GAME = [
   'https://games.dmm.com/detail/oshirore/',
   'https://games.dmm.com/detail/aigisc/',
-  'https://games.dmm.com/detail/baldr/',
+  'http://pc-play.games.dmm.com/play/little_richman/',
   'https://games.dmm.com/detail/kancolle/',
 ]
 
@@ -64,7 +64,7 @@ void(async () => {
   await page.waitFor('.fn-tabReceive')
   await page.click('.receiveAll_btn')
   await page.waitFor('.fn-getMedalSingle')
-  // await page.waitFor(1000)
+  await page.waitFor(1000)
   // await page.screenshot({path: 'capture/mission/99_freeget.png'})
   await console.log('freeget!')
 

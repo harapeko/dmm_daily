@@ -17,7 +17,7 @@ const MISSIONS = [
 const MISSIONS_GAME = [
   'https://games.dmm.com/detail/oshirore/',
   'https://games.dmm.com/detail/aigisc/',
-  'http://pc-play.games.dmm.com/play/little_richman/',
+  // 'http://pc-play.games.dmm.com/play/little_richman/',
   'https://games.dmm.com/detail/kancolle/',
 ]
 

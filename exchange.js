@@ -1,7 +1,6 @@
 'use strict'
 
 const login = require('./login')
-const launch = require('./launch')
 
 const EXCHANGES = [
   'https://mission.games.dmm.com/exchange/',

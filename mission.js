@@ -1,7 +1,6 @@
 'use strict'
 
 const login = require('./login')
-const launch = require('./launch')
 
 // ミッションTOP。抽選URL取得、ミッション報酬受取で使用する
 const MISSION_TOP = 'https://mission.games.dmm.com/'
